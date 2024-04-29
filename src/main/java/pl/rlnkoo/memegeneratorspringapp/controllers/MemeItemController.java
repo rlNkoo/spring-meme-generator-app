@@ -1,11 +1,15 @@
 package pl.rlnkoo.memegeneratorspringapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import pl.rlnkoo.memegeneratorspringapp.models.MemeItem;
 import pl.rlnkoo.memegeneratorspringapp.services.MemeItemService;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/meme-items")
@@ -17,5 +21,23 @@ public class MemeItemController {
     @GetMapping("")
     public Iterable<MemeItem> getMemeItems() {
         return memeItemService.getAll();
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> createMemeItem(@RequestParam("image") String imageData) throws UnsupportedEncodingException {
+        MemeItem memeItem = new MemeItem();
+
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] decodedBytes = decoder.decode(imageData.split(",")[1]);
+        memeItem.setImage(decodedBytes);
+        memeItemService.save(memeItem);
+
+        byte[] encodedBytes = Base64.getEncoder().encode(memeItem.getImage());
+        String data = new String(encodedBytes, "UTF-8");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("data", data);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }

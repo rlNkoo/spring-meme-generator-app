@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { DesignerComponent } from './designer/designer.component';
+import { DetailComponent } from './detail/detail.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ AppComponent,
 NavbarComponent,
 HomeComponent,
 DesignerComponent,
+DetailComponent,
 
 ],
 imports: [
