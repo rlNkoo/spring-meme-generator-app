@@ -10,6 +10,7 @@ import pl.rlnkoo.memegeneratorspringapp.services.MemeItemService;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/meme-items")
@@ -40,4 +41,12 @@ public class MemeItemController {
 
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public Optional<MemeItem> getMemeItem(@PathVariable Long id) {
+        Optional<MemeItem> optionalMemeItem = memeItemService.getById(id);
+
+        return optionalMemeItem;
+    }
+
 }
