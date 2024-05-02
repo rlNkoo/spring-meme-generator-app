@@ -1,7 +1,6 @@
 #1: Angular building
 FROM node:14 as angular-build
 WORKDIR /app
-COPY ./src/main/frontend /app
 RUN npm install
 RUN npm run build
 
@@ -16,5 +15,4 @@ RUN mv ./target/*.jar ./target/meme-generator-app-spring-boot.jar
 FROM openjdk:21-jdk
 WORKDIR /app
 COPY --from=spring-boot-build /app/target/meme-generator-app-spring-boot.jar .
-COPY --from=angular-build /app/../resources/static ./frontend
 ENTRYPOINT ["java", "-jar", "meme-generator-app-spring-boot.jar"]
